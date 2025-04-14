@@ -1,0 +1,38 @@
+# Node dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# dotenv files (optional: ignore in production images)
+.env
+.env.*
+
+# Logs
+logs
+*.log
+
+# Build / dist artifacts
+dist
+build
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+
+# Docker files that shouldn't be in container
+docker-compose.override.yml
+
+# Optional: Ignore test files
+__tests__/
+*.test.js
+*.spec.js
+coverage
+
+# IDE settings
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
