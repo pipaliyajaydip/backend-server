@@ -1,0 +1,18 @@
+# To build and run everything defined in the docker-compose.yml [by default name take as dir name]
+    docker-compose up -d --build
+
+# build with name
+    docker-compose -p <type name here> up -d --build
+
+# re-build the service
+    docker-compose up --build <service name>
+
+# already have build, just want to start
+    docker-compose up -d <service name>
+
+# for stop
+    docker-compose down
+
+# for stop and remove volume [If you have db service, and trying to remove volume - all database will delete]
+    docker-compose down -v
+
