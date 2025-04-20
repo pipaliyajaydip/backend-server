@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+# COPY . . [it's overwrites the volume changes, we have written volume in compose file]
 
 EXPOSE 5000
 

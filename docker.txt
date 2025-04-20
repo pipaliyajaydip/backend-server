@@ -16,3 +16,12 @@
 # for stop and remove volume [If you have db service, and trying to remove volume - all database will delete]
     docker-compose down -v
 
+# running container list
+    docker ps
+
+# How to enter running docker contaoiner
+    docker exec -it <container_name_or_id> bash
+
+    i.g if we have postgreSQL runninng container
+    docker exce it <my-container name or id> bash psql -U <user> -d <database name> [psql -U <user> -d <database name> this comand we can provide saprate also]
+

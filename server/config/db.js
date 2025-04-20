@@ -1,12 +1,16 @@
 import pg from "pg";
 import dotenv from "dotenv";
+dotenv.config();
+
 const { Pool } = pg;
 
-const envFilePath = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+const envFilePath = process.env.NODE_ENV === 'production'
+    ? '.env.production'
+    : '.env.development';
 
 dotenv.config({
     path: envFilePath
-})
+});
 
 const pool = new Pool({
     host: process.env.DB_HOST,
