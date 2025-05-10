@@ -1,25 +1,14 @@
 import express from "express";
 import os from "os";
 import cluster from "cluster";
-import dotenv from "dotenv";
 import router from "./routes/route.js";
-dotenv.config();
+import { PORT } from "./config/env.js"
 
 const app = express();
-
-const envFilePath = process.env.NODE_ENV === 'production'
-    ? '.env.production'
-    : '.env.development';
-
-dotenv.config({
-    path: envFilePath
-});
 
 const noOfCPU = os.availableParallelism
     ? os.availableParallelism()
     : os.cpus().length;
-
-const PORT = process.env.PORT;
 
 console.log("noOfCPU: ", noOfCPU);
 
