@@ -23,5 +23,5 @@
     docker exec -it <container_name_or_id> bash
 
     i.g if we have postgreSQL runninng container
-    docker exce it <my-container name or id> bash psql -U <user> -d <database name> [psql -U <user> -d <database name> this comand we can provide saprate also]
+    docker exec -it <my-container name or id> bash psql -U <user> -d <database name> [psql -U <user> -d <database name> this comand we can provide saprate also]
 
