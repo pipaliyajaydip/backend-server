@@ -25,3 +25,13 @@
     i.g if we have postgreSQL runninng container
     docker exec -it <my-container name or id> bash psql -U <user> -d <database name> [psql -U <user> -d <database name> this comand we can provide saprate also]
 
+# To get all running container container id
+    docker ps -q
+
+# To get all container info [running and closed both]
+    docker ps -a
+
+# To restart container
+    docker restart <container id>
+    if multiple: docker restart $(docker ps -q)
+
