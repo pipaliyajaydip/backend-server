@@ -1,43 +1,111 @@
-import { getUsers, insertUser } from '../models/userModel.js'
+import bcryptjs from 'bcryptjs';
+import { getUsers, isUserExists, insertUser } from '../models/userModel.js';
+import { successResponse } from '../utils/responses/responseHandler.js';
 
-export const pingTest = (req, res) => {
+const SALT_ROUNDS = 10;
+
+export const pingTest = (req, res, next) => {
     try {
-        res.status(200).json({
-            msg: `Your api is up and running on worker ${process.pid}`
-        });
+        // res.status(200).json({
+        //     msg: `Your api is up and running on worker ${process.pid}`
+        // });
+
+        return successResponse(
+            res,
+            200,
+            { apiTestResult: "The API is ready for use." },
+            "<#Happy_Coding!/>"
+        );
     } catch (err) {
-        res.status(500).json({
-            msg: `something went wrong on WorkerId: ${process.pid}`,
-            error: err.message
+        // res.status(500).json({
+        //     msg: `something went wrong on WorkerId: ${process.pid}`,
+        //     error: err.message
+        // });
+        return next({
+            statusCode: 500,
+            errorCode: "INTERNAL_SERVER_ERROR",
+            message: "An unexpected error occurred.",
+            originalMessage: err.message
         });
     }
 }
 
-export const fetchUsers = async (req, res) => {
+export const fetchUsers = async (req, res, next) => {
     try {
         const result = await getUsers();
-        res.status(200).json({
-            data: result
-        });
+        // res.status(200).json({
+        //     data: result
+        // });
+
+        return successResponse(
+            res,
+            200,
+            result,
+            "All user data fetched successfully."
+        );
     } catch (err) {
-        res.status(500).json({
-            error: 'something went wrong while fetching the user data'
+        // res.status(500).json({
+        //     error: 'something went wrong while fetching the user data'
+        // });
+        return next({
+            statusCode: 500,
+            errorCode: "INTERNAL_SERVER_ERROR",
+            message: "An unexpected error occurred.",
+            originalMessage: err.message
         });
     }
 }
 
-export const addUser = async (req, res) => {
-    const { name, email, password } = req.body;
+export const addUser = async (req, res, next) => {
     try {
-        const result = await insertUser(name, email, password);
-        res.status(201).json({
-            msg: "user inserted successfully",
-            data: result
-        });
+        const { name, email, password } = req.body;
+
+        if (!name || !email || !password) {
+            return next({
+                statusCode: 400,
+                errorCode: "FIELDS_ARE_REQUIRED",
+                message: "name, email, and password are required"
+            });
+        }
+
+        const userExists = await isUserExists(email);
+        console.log("userExists", userExists);
+
+        if (userExists) {
+            return next({
+                statusCode: 409,
+                errorCode: "USER_ALREADY_EXISTS",
+                message: "User already exists"
+            });
+        }
+
+        const hashedPassword = await bcryptjs.hash(password, SALT_ROUNDS);
+        const result = await insertUser(name, email, hashedPassword);
+
+        console.log("isSame", isSame);
+
+        // res.status(201).json({
+        //     msg: "user inserted successfully",
+        //     data: result
+        // });
+
+        return successResponse(
+            res,
+            201,
+            result,
+            "user inserted successfully"
+        );
     } catch (err) {
-        res.status(500).json({
-            msg: "something went wrong on addUser endpoint",
-            error: err.message
+        // res.status(500).json({
+        //     msg: "something went wrong on addUser endpoint",
+        //     error: err.message
+        // });
+
+        return next({
+            statusCode: 500,
+            errorCode: "INTERNAL_SERVER_ERROR",
+            message: "An unexpected error occurred.",
+            originalMessage: err.message
         });
     }
 }

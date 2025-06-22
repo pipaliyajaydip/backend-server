@@ -3,6 +3,7 @@ import os from "os";
 import cluster from "cluster";
 import router from "./routes/route.js";
 import { PORT } from "./config/env.js"
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ if (cluster.isPrimary) {
     console.log(`CPU: Worker ${process.pid}, PORT: ${PORT}`);
     app.use(express.json());
     app.use("/", router);
+    app.use(errorHandler);
 
     app.listen(PORT, () => {
         console.log(`Worker ${process.pid} running on port ${PORT}`);
