@@ -29,7 +29,7 @@ export const insertUser = async (name, email, password) => {
     return result.rows[0];
 }
 
-export const loginCredntial = async (email) => {
+export const userAuthDetails = async (email) => {
     const result = await pool.query(
         `
             SELECT
