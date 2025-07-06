@@ -64,7 +64,7 @@ export const addUser = async (req, res, next) => {
             return next({
                 statusCode: 400,
                 errorCode: "FIELDS_ARE_REQUIRED",
-                message: "name, email, and password are required"
+                message: "name, email, and password are required."
             });
         }
 
@@ -81,8 +81,6 @@ export const addUser = async (req, res, next) => {
 
         const hashedPassword = await bcryptjs.hash(password, SALT_ROUNDS);
         const result = await insertUser(name, email, hashedPassword);
-
-        console.log("isSame", isSame);
 
         // res.status(201).json({
         //     msg: "user inserted successfully",
