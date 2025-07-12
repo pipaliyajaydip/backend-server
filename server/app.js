@@ -7,6 +7,7 @@ import { PORT } from "./config/env.js"
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
+app.disable('x-powered-by');
 
 const noOfCPU = os.availableParallelism
     ? os.availableParallelism()
