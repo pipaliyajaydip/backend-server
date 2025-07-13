@@ -80,8 +80,11 @@ export const addUser = async (req, res, next) => {
         }
 
         const hashedPassword = await bcryptjs.hash(password, SALT_ROUNDS);
-        const result = await insertUser(name, email, hashedPassword);
-
+        const data = await insertUser(name, email, hashedPassword);
+        const result = {
+            name: data?.name,
+            email: data?.email
+        }
         // res.status(201).json({
         //     msg: "user inserted successfully",
         //     data: result
