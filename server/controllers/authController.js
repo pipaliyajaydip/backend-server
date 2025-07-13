@@ -104,7 +104,8 @@ export const refreshToken = (req, res, next) => {
         return next({
             statusCode: 403,
             errorCode: "NOT_VALID_REFRESH_TOKEN",
-            message: "Invalid refresh token."
+            message: "Invalid refresh token.",
+            originalMessage: err.message
         });
     }
 }
