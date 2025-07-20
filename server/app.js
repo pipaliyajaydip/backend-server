@@ -2,10 +2,12 @@ import express from "express";
 import os from "os";
 import cluster from "cluster";
 import router from "./routes/route.js";
+import cookieParser from "cookie-parser";
 import { PORT } from "./config/env.js"
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
+app.disable('x-powered-by');
 
 const noOfCPU = os.availableParallelism
     ? os.availableParallelism()
@@ -25,6 +27,9 @@ if (cluster.isPrimary) {
 } else {
     console.log(`CPU: Worker ${process.pid}, PORT: ${PORT}`);
     app.use(express.json());
+    app.use(cookieParser());
+    //app.use('/api/auth', authRoutes);
+    //app.use('/api/protected', protectedRoutes);
     app.use("/", router);
     app.use(errorHandler);
 

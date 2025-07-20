@@ -28,3 +28,18 @@ export const insertUser = async (name, email, password) => {
     );
     return result.rows[0];
 }
+
+export const userAuthDetails = async (email) => {
+    const result = await pool.query(
+        `
+            SELECT
+                id, email, password
+            FROM
+                users
+            WHERE
+                email = $1
+        `,
+        [email]
+    );
+    return result.rows[0];
+}
