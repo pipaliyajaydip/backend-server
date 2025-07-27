@@ -10,6 +10,11 @@ export const errorHandler = (err, req, res, next) => {
     const message = err.message || 'An unexpected error occurred.';
     const details = err.details || null;
 
-
-    return errorResponse(res, statusCode, errorCode, message, details);
+    return errorResponse(
+        res,
+        statusCode,
+        errorCode,
+        message,
+        details
+    );
 }

@@ -10,7 +10,7 @@ export const authMiddleware = (req, res, next) => {
             statusCode: 401,
             errorCode: "ACCESS_TOKEN_NOT_PRESENT",
             message: "Unauthorized access."
-        })
+        });
     }
 
     const token = authHeader.split(' ')[1];
@@ -24,6 +24,6 @@ export const authMiddleware = (req, res, next) => {
             statusCode: 403,
             errorCode: "NOT_VALID_ACCESS_TOKEN",
             message: "Access token invalid or expired."
-        })
+        });
     }
 }
