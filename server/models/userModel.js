@@ -43,3 +43,18 @@ export const userAuthDetails = async (email) => {
     );
     return result.rows[0];
 }
+
+export const deleteUserData = async (email) => {
+    const result = await pool.query(
+        `
+            DELETE FROM
+                users
+            WHERE
+                email = $1 
+            RETURNING
+                name, email
+        `,
+        [email]
+    );
+    return result.rows[0];
+}
