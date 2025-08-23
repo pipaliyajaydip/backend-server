@@ -18,6 +18,8 @@ export const login = async (req, res, next) => {
 
         const user = await userAuthDetails(email);
 
+        console.log('user details: ', user);
+
         if (!user) {
             return next({
                 statusCode: 401,
@@ -36,7 +38,7 @@ export const login = async (req, res, next) => {
             });
         }
 
-        const accessToken = generateAccessToken(user.id);
+        const accessToken = generateAccessToken(user);
         const refreshToke = generateRefreshToken(user.id);
 
         const result = {

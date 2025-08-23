@@ -13,9 +13,16 @@ export const authMiddleware = (req, res, next) => {
         });
     }
 
-    const token = authHeader.split(' ')[1];
-
     try {
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return next({
+                statusCode: 401,
+                errorCode: "ACCESS_TOKEN_NOT_PRESENT",
+                message: "Unauthorized access."
+            });
+        }
+        
         const decodedData = verifyAccessToken(token);
         req.userInfo = decodedData;
         next();

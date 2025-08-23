@@ -6,9 +6,12 @@ import {
     REFRESH_EXPIRES_IN
 } from '../../config/env.js';
 
-export const generateAccessToken = (userId) => {
+export const generateAccessToken = (userDetails) => {
     return jwt.sign(
-        { userId },
+        {
+            userId: userDetails?.id,
+            userRole: userDetails?.role,
+        },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRES_IN }
     );

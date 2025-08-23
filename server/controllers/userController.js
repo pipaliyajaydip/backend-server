@@ -31,6 +31,7 @@ export const pingTest = (req, res, next) => {
 }
 
 export const fetchUsers = async (req, res, next) => {
+    console.log("req from fecth user: ", req);
     try {
         const result = await getUsers();
         // res.status(200).json({

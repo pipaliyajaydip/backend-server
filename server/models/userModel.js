@@ -33,7 +33,7 @@ export const userAuthDetails = async (email) => {
     const result = await pool.query(
         `
             SELECT
-                id, email, password
+                id, email, password, role
             FROM
                 users
             WHERE

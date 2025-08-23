@@ -11,6 +11,7 @@ router.get('/ping', pingTest);
 router.get('/getusers', authMiddleware, fetchUsers);
 router.post('/adduser', validate(registerUserSchema, 'body'), addUser);
 router.post('/login', validate(loginUserSchema, 'body'), login);
+// router.post('/delete', validate(deleteUserSchema, 'body'), login);
 router.post('/refreshToken', refreshToken);
 
 export default router;
