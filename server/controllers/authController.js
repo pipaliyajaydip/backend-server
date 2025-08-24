@@ -39,7 +39,7 @@ export const login = async (req, res, next) => {
         }
 
         const accessToken = generateAccessToken(user);
-        const refreshToke = generateRefreshToken(user.id);
+        const refreshToken = generateRefreshToken(user);
 
         const result = {
             userEmail: user.email,
@@ -49,12 +49,11 @@ export const login = async (req, res, next) => {
             expireAt: JWT_EXPIRES_AT
         };
 
-        res.cookie('refreshToken', refreshToke, {
+        res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',
             maxAge: REFRESH_EXPIRE_AT
-
         });
 
         return successResponse(
@@ -87,10 +86,12 @@ export const refreshToken = (req, res, next) => {
     }
 
     try {
-        const { userId } = verifyRefreshToken(token);
-        const newAccessToken = generateAccessToken(userId);
+        const user = verifyRefreshToken(token);
+        console.log('userdata: cookie', user);
+        const newAccessToken = generateAccessToken(user);
         const result = {
-            tokenType: 'Bearer',
+            userEmail: user?.email,
+            tokenType: 'Bearer', 
             accessToken: newAccessToken,
             expireIn: JWT_EXPIRES_IN,
             expireAt: JWT_EXPIRES_AT

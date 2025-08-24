@@ -5,7 +5,7 @@ export const authMiddleware = (req, res, next) => {
 
     console.log("req.header: ", req.headers);
 
-    if (!authHeader?.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader?.startsWith('Bearer ')) {
         return next({
             statusCode: 401,
             errorCode: "ACCESS_TOKEN_NOT_PRESENT",
@@ -24,6 +24,7 @@ export const authMiddleware = (req, res, next) => {
         }
         
         const decodedData = verifyAccessToken(token);
+        console.log("decodedData: ", decodedData);
         req.userInfo = decodedData;
         next();
     } catch (err) {

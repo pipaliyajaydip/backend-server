@@ -8,7 +8,7 @@ export const authorizeRole = (...allowedRoles) => {
                 message: "Forbidden. You are not allowed to perform this action."
             });
         }
-        if (!allowedRoles.includes(req.userInfo?.userRole)) {
+        if (!allowedRoles.includes(req.userInfo?.role)) {
             return next({
                 statusCode: 403,
                 errorCode: "UNAUTHORIZED_ACCESS",
