@@ -1,16 +1,1 @@
 # backend-server
-
-* Env Variables:
-NODE_ENV=development
-PORT=5000
-
-DB_HOST=
-DB_PORT=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-
-JWT_SECRET=
-JWT_EXPIRES_IN=15m
-REFRESH_SECRET=
-REFRESH_EXPIRES_IN=7d
