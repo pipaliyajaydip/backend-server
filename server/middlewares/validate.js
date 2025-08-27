@@ -12,8 +12,6 @@ export const validate = (schema, property = 'body') => {
                 message: messages,
             });
         }
-
         next();
-
     }
 }

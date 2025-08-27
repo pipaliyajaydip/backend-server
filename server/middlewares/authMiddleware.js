@@ -5,18 +5,26 @@ export const authMiddleware = (req, res, next) => {
 
     console.log("req.header: ", req.headers);
 
-    if (!authHeader?.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader?.startsWith('Bearer ')) {
         return next({
             statusCode: 401,
             errorCode: "ACCESS_TOKEN_NOT_PRESENT",
             message: "Unauthorized access."
-        })
+        });
     }
 
-    const token = authHeader.split(' ')[1];
-
     try {
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return next({
+                statusCode: 401,
+                errorCode: "ACCESS_TOKEN_NOT_PRESENT",
+                message: "Unauthorized access."
+            });
+        }
+        
         const decodedData = verifyAccessToken(token);
+        console.log("decodedData: ", decodedData);
         req.userInfo = decodedData;
         next();
     } catch (err) {
@@ -24,6 +32,6 @@ export const authMiddleware = (req, res, next) => {
             statusCode: 403,
             errorCode: "NOT_VALID_ACCESS_TOKEN",
             message: "Access token invalid or expired."
-        })
+        });
     }
 }

@@ -33,11 +33,26 @@ export const userAuthDetails = async (email) => {
     const result = await pool.query(
         `
             SELECT
-                id, email, password
+                id, email, password, role
             FROM
                 users
             WHERE
                 email = $1
+        `,
+        [email]
+    );
+    return result.rows[0];
+}
+
+export const deleteUserData = async (email) => {
+    const result = await pool.query(
+        `
+            DELETE FROM
+                users
+            WHERE
+                email = $1 
+            RETURNING
+                name, email
         `,
         [email]
     );

@@ -6,17 +6,25 @@ import {
     REFRESH_EXPIRES_IN
 } from '../../config/env.js';
 
-export const generateAccessToken = (userId) => {
+export const generateAccessToken = (userDetails) => {
     return jwt.sign(
-        { userId },
+        {
+            id: userDetails?.id,
+            email: userDetails?.email,
+            role: userDetails?.role,
+        },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRES_IN }
     );
 }
 
-export const generateRefreshToken = (userId) => {
+export const generateRefreshToken = (userDetails) => {
     return jwt.sign(
-        { userId },
+        {
+            id: userDetails?.id,
+            email: userDetails?.email,
+            role: userDetails?.role,
+        },
         REFRESH_SECRET,
         { expiresIn: REFRESH_EXPIRES_IN }
     );

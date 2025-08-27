@@ -1,8 +1,8 @@
 import express from "express";
 import os from "os";
 import cluster from "cluster";
-import router from "./routes/route.js";
 import cookieParser from "cookie-parser";
+import router from "./routes/route.js";
 import { PORT } from "./config/env.js"
 import { errorHandler } from "./middlewares/errorHandler.js";
 
