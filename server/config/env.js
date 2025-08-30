@@ -2,7 +2,10 @@ import dotenv from "dotenv";
 import ms from "ms";
 dotenv.config();
 
-const envFilePath = process.env.NODE_ENV === 'production'
+export const currentEnvType = process.env.NODE_ENV;
+export const isProdEnv = currentEnvType === 'production';
+
+const envFilePath = isProdEnv
     ? '.env.production'
     : '.env.development';
 
