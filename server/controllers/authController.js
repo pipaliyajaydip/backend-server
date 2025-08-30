@@ -124,7 +124,7 @@ export const logout = (req, res) => {
     return successResponse(
         res,
         200,
-        result,
+        "see you again. Bye Bye...",
         "User logged out successfully."
     );
 }
