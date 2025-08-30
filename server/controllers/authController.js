@@ -91,7 +91,7 @@ export const refreshToken = (req, res, next) => {
         const newAccessToken = generateAccessToken(user);
         const result = {
             userEmail: user?.email,
-            tokenType: 'Bearer', 
+            tokenType: 'Bearer',
             accessToken: newAccessToken,
             expireIn: JWT_EXPIRES_IN,
             expireAt: JWT_EXPIRES_AT
@@ -111,4 +111,20 @@ export const refreshToken = (req, res, next) => {
             originalMessage: err.message
         });
     }
+}
+
+export const logout = (req, res) => {
+    res.clearCookies('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict',
+        maxAge: 0
+    });
+
+    return successResponse(
+        res,
+        200,
+        result,
+        "User logged out successfully."
+    );
 }
