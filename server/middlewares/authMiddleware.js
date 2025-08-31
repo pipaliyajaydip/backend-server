@@ -2,10 +2,11 @@ import { verifyAccessToken } from "../utils/Jwt/token.js";
 
 export const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    const accessTokenFromCookie = req.cookies.accessToken;
 
     console.log("req.header: ", req.headers);
 
-    if (!authHeader || !authHeader?.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader?.startsWith('Bearer ') || !accessTokenFromCookie) {
         return next({
             statusCode: 401,
             errorCode: "ACCESS_TOKEN_NOT_PRESENT",
@@ -15,15 +16,17 @@ export const authMiddleware = (req, res, next) => {
 
     try {
         const token = authHeader.split(' ')[1];
-        if (!token) {
+
+        if (!token || !accessTokenFromCookie) {
             return next({
                 statusCode: 401,
                 errorCode: "ACCESS_TOKEN_NOT_PRESENT",
                 message: "Unauthorized access."
             });
         }
-        
+
         const decodedData = verifyAccessToken(token);
+        verifyAccessToken(accessTokenFromCookie);
         console.log("decodedData: ", decodedData);
         req.userInfo = decodedData;
         next();

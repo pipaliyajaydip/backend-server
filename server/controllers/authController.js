@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { isProdEnv } from "../config/env.js";
 import { userAuthDetails } from "../models/userModel.js"
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/Jwt/token.js";
 import { successResponse } from "../utils/responses/responseHandler.js";
@@ -51,9 +52,16 @@ export const login = async (req, res, next) => {
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: true,
+            secure: isProdEnv,
             sameSite: 'Strict',
             maxAge: REFRESH_EXPIRE_AT
+        });
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: isProdEnv,
+            sameSite: 'Strict',
+            maxAge: JWT_EXPIRES_AT
         });
 
         return successResponse(
@@ -89,13 +97,22 @@ export const refreshToken = (req, res, next) => {
         const user = verifyRefreshToken(token);
         console.log('userdata: cookie', user);
         const newAccessToken = generateAccessToken(user);
+
         const result = {
             userEmail: user?.email,
-            tokenType: 'Bearer', 
+            tokenType: 'Bearer',
             accessToken: newAccessToken,
             expireIn: JWT_EXPIRES_IN,
             expireAt: JWT_EXPIRES_AT
         }
+
+        res.cookie('accessToken', newAccessToken, {
+            httpOnly: true,
+            secure: isProdEnv,
+            sameSite: 'Strict',
+            maxAge: JWT_EXPIRES_AT
+        });
+
         return successResponse(
             res,
             200,
@@ -111,4 +128,27 @@ export const refreshToken = (req, res, next) => {
             originalMessage: err.message
         });
     }
+}
+
+export const logout = (req, res) => {
+    res.clearCookie('accessToken', {
+        httpOnly: true,
+        secure: isProdEnv,
+        sameSite: 'Strict',
+        maxAge: 0
+    });
+
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: isProdEnv,
+        sameSite: 'Strict',
+        maxAge: 0
+    });
+
+    return successResponse(
+        res,
+        200,
+        "see you again. Bye Bye...",
+        "User logged out successfully."
+    );
 }
