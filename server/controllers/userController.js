@@ -117,7 +117,7 @@ export const deleteUser = async (req, res, next) => {
         const { email } = req.body;
 
         if (!email) {
-             return next({
+            return next({
                 statusCode: 400,
                 errorCode: "FIELDS_ARE_REQUIRED",
                 message: "User email is required."
@@ -129,7 +129,7 @@ export const deleteUser = async (req, res, next) => {
         console.log("result from delete", result);
 
         if (!result) {
-             return next({
+            return next({
                 statusCode: 404,
                 errorCode: "DETAILS_NOT_FOUND",
                 message: "User not found."
