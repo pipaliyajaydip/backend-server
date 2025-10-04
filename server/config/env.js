@@ -1,16 +1,16 @@
-import dotenv from "dotenv";
-import ms from "ms";
+import dotenv from 'dotenv';
+import ms from 'ms';
 dotenv.config();
 
 export const currentEnvType = process.env.NODE_ENV;
 export const isProdEnv = currentEnvType === 'production';
 
 const envFilePath = isProdEnv
-    ? '.env.production'
-    : '.env.development';
+  ? '.env.production'
+  : '.env.development';
 
 dotenv.config({
-    path: envFilePath
+  path: envFilePath
 });
 
 export const PORT = process.env.PORT;
