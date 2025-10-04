@@ -6,7 +6,7 @@ import { registerUserSchema, loginUserSchema, deleteUserSchema } from '../valida
 import { pingTest, fetchUsers, addUser, deleteUser } from '../controllers/userController.js';
 import { login, logout, refreshToken } from '../controllers/authController.js';
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/ping', pingTest);
 router.get('/getusers', authMiddleware, authorizeRole('admin'), fetchUsers);

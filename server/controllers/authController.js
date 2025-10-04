@@ -1,154 +1,154 @@
-import bcrypt from "bcryptjs";
-import { isProdEnv } from "../config/env.js";
-import { userAuthDetails } from "../models/userModel.js"
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/Jwt/token.js";
-import { successResponse } from "../utils/responses/responseHandler.js";
-import { JWT_EXPIRES_IN, JWT_EXPIRES_AT, REFRESH_EXPIRES_IN, REFRESH_EXPIRE_AT } from "../config/env.js";
+import bcrypt from 'bcryptjs';
+import { isProdEnv } from '../config/env.js';
+import { userAuthDetails } from '../models/userModel.js';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/Jwt/token.js';
+import { successResponse } from '../utils/responses/responseHandler.js';
+import { JWT_EXPIRES_IN, JWT_EXPIRES_AT, REFRESH_EXPIRES_IN, REFRESH_EXPIRE_AT } from '../config/env.js';
 
 export const login = async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-        if (!email || !password) {
-            return next({
-                statusCode: 400,
-                errorCode: "FIELDS_ARE_REQUIRED",
-                message: "email and password are required."
-            });
-        }
-
-        const user = await userAuthDetails(email);
-
-        console.log('user details: ', user);
-
-        if (!user) {
-            return next({
-                statusCode: 401,
-                errorCode: "INVALID_CREDENTIALS",
-                message: "Invalid credentials."
-            });
-        }
-
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordMatch) {
-            return next({
-                statusCode: 401,
-                errorCode: "INVALID_CREDENTIALS",
-                message: "Invalid credentials."
-            });
-        }
-
-        const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-
-        const result = {
-            userEmail: user.email,
-            tokenType: 'Bearer',
-            accessToken: accessToken,
-            expireIn: JWT_EXPIRES_IN,
-            expireAt: JWT_EXPIRES_AT
-        };
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: isProdEnv,
-            sameSite: 'Strict',
-            maxAge: REFRESH_EXPIRE_AT
-        });
-
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            secure: isProdEnv,
-            sameSite: 'Strict',
-            maxAge: JWT_EXPIRES_AT
-        });
-
-        return successResponse(
-            res,
-            200,
-            result,
-            "User signed in successfully."
-        );
-
-    } catch (err) {
-        return next({
-            statusCode: 500,
-            errorCode: "INTERNAL_SERVER_ERROR",
-            message: "An unexpected error occurred.",
-            originalMessage: err.message
-        });
-    }
-};
-
-export const refreshToken = (req, res, next) => {
-    console.log("req.cookie: ", req.cookies);
-    const token = req.cookies.refreshToken;
-
-    if (!token) {
-        return next({
-            statusCode: 401,
-            errorCode: "REF_TOKEN_NOT_PRESENT",
-            message: "Refresh token not provided."
-        });
+    if (!email || !password) {
+      return next({
+        statusCode: 400,
+        errorCode: 'FIELDS_ARE_REQUIRED',
+        message: 'email and password are required.'
+      });
     }
 
-    try {
-        const user = verifyRefreshToken(token);
-        console.log('userdata: cookie', user);
-        const newAccessToken = generateAccessToken(user);
+    const user = await userAuthDetails(email);
 
-        const result = {
-            userEmail: user?.email,
-            tokenType: 'Bearer',
-            accessToken: newAccessToken,
-            expireIn: JWT_EXPIRES_IN,
-            expireAt: JWT_EXPIRES_AT
-        }
+    console.log('user details: ', user);
 
-        res.cookie('accessToken', newAccessToken, {
-            httpOnly: true,
-            secure: isProdEnv,
-            sameSite: 'Strict',
-            maxAge: JWT_EXPIRES_AT
-        });
-
-        return successResponse(
-            res,
-            200,
-            result,
-            "New access token generated successfully."
-        );
-
-    } catch (err) {
-        return next({
-            statusCode: 403,
-            errorCode: "NOT_VALID_REFRESH_TOKEN",
-            message: "Invalid refresh token.",
-            originalMessage: err.message
-        });
+    if (!user) {
+      return next({
+        statusCode: 401,
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials.'
+      });
     }
-}
 
-export const logout = (req, res) => {
-    res.clearCookie('accessToken', {
-        httpOnly: true,
-        secure: isProdEnv,
-        sameSite: 'Strict',
-        maxAge: 0
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatch) {
+      return next({
+        statusCode: 401,
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials.'
+      });
+    }
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    const result = {
+      userEmail: user.email,
+      tokenType: 'Bearer',
+      accessToken: accessToken,
+      expireIn: JWT_EXPIRES_IN,
+      expireAt: JWT_EXPIRES_AT
+    };
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: isProdEnv,
+      sameSite: 'Strict',
+      maxAge: REFRESH_EXPIRE_AT
     });
 
-    res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: isProdEnv,
-        sameSite: 'Strict',
-        maxAge: 0
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: isProdEnv,
+      sameSite: 'Strict',
+      maxAge: JWT_EXPIRES_AT
     });
 
     return successResponse(
-        res,
-        200,
-        "see you again. Bye Bye...",
-        "User logged out successfully."
+      res,
+      200,
+      result,
+      'User signed in successfully.'
     );
-}
+
+  } catch (err) {
+    return next({
+      statusCode: 500,
+      errorCode: 'INTERNAL_SERVER_ERROR',
+      message: 'An unexpected error occurred.',
+      originalMessage: err.message
+    });
+  }
+};
+
+export const refreshToken = (req, res, next) => {
+  console.log('req.cookie: ', req.cookies);
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    return next({
+      statusCode: 401,
+      errorCode: 'REF_TOKEN_NOT_PRESENT',
+      message: 'Refresh token not provided.'
+    });
+  }
+
+  try {
+    const user = verifyRefreshToken(token);
+    console.log('userdata: cookie', user);
+    const newAccessToken = generateAccessToken(user);
+
+    const result = {
+      userEmail: user?.email,
+      tokenType: 'Bearer',
+      accessToken: newAccessToken,
+      expireIn: JWT_EXPIRES_IN,
+      expireAt: JWT_EXPIRES_AT
+    };
+
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: isProdEnv,
+      sameSite: 'Strict',
+      maxAge: JWT_EXPIRES_AT
+    });
+
+    return successResponse(
+      res,
+      200,
+      result,
+      'New access token generated successfully.'
+    );
+
+  } catch (err) {
+    return next({
+      statusCode: 403,
+      errorCode: 'NOT_VALID_REFRESH_TOKEN',
+      message: 'Invalid refresh token.',
+      originalMessage: err.message
+    });
+  }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie('accessToken', {
+    httpOnly: true,
+    secure: isProdEnv,
+    sameSite: 'Strict',
+    maxAge: 0
+  });
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: isProdEnv,
+    sameSite: 'Strict',
+    maxAge: 0
+  });
+
+  return successResponse(
+    res,
+    200,
+    'see you again. Bye Bye...',
+    'User logged out successfully.'
+  );
+};
