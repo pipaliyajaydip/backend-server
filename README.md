@@ -73,6 +73,11 @@ docker run -p 5000:5000 --env-file .env.development backend-server
 
 ## API Endpoints
 
+### Swagger file
+
+- `/api/docs`  
+  API Documentation.
+
 ### Auth
 
 - `POST /login`  
