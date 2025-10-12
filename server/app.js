@@ -28,9 +28,7 @@ if (cluster.isPrimary) {
   console.log(`CPU: Worker ${process.pid}, PORT: ${PORT}`);
   app.use(express.json());
   app.use(cookieParser());
-  //app.use('/api/auth', authRoutes);
-  //app.use('/api/protected', protectedRoutes);
-  app.use('/', router);
+  app.use('/api', router);
   app.use(errorHandler);
 
   app.listen(PORT, () => {
