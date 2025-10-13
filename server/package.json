@@ -2,6 +2,13 @@
   "name": "backend-server",
   "version": "1.0.0",
   "description": "Backend service for the handle user database",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pipaliyajaydip/backend-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pipaliyajaydip/backend-server/issues"
+  },
   "engines": {
     "node": ">=22.14.0",
     "npm": ">=10.9.2"
@@ -15,7 +22,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
   },
-  "keywords": [],
+  "keywords": ["express", "jwt", "postgresql", "swagger", "api", "backend", "nodejs", "auth"],
   "author": "JAYDIP PIPALIYA",
   "license": "ISC",
   "dependencies": {
