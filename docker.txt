@@ -35,3 +35,6 @@
     docker restart <container id>
     if multiple: docker restart $(docker ps -q)
 
+# Create Docker netwok
+    docker network create <networ name>
+
