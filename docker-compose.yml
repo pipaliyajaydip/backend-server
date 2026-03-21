@@ -9,13 +9,15 @@ services:
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: devdb
     ports:
-      - "5001:5432"
+      - "5050:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - micro-services-net
 
-  backend:
+  user-service:
     build: ./server
-    container_name: my_backend_app
+    container_name: user-service
     working_dir: /app
     ports:
       - "5000:5000"
@@ -26,7 +28,13 @@ services:
       - .env.development
     depends_on:
       - db
+    networks:
+      - micro-services-net
     command: npm run dev
 
 volumes:
   postgres-data:
+
+networks:
+  micro-services-net:
+    external: true
