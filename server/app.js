@@ -28,6 +28,10 @@ if (cluster.isPrimary) {
   console.log(`CPU: Worker ${process.pid}, PORT: ${PORT}`);
   app.use(express.json());
   app.use(cookieParser());
+  app.use((req, res, next) => {
+    console.log('Microservice:', req.method, req.originalUrl);
+    next();
+  });
   app.use('/api', router);
   app.use(errorHandler);
 
