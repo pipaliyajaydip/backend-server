@@ -13,7 +13,7 @@ const noOfCPU = os.availableParallelism
   ? os.availableParallelism()
   : os.cpus().length;
 
-console.log('noOfCPU: ', noOfCPU);
+console.log('noOfCPU : ', noOfCPU);
 
 if (cluster.isPrimary) {
   console.log(`CPU If Part: Worker ${process.pid}, PORT: ${PORT}`);
